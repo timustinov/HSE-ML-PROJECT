@@ -1,0 +1,188 @@
+\documentclass[14pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[english,russian]{babel}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{ragged2e}
+\usepackage{adjustbox}
+
+% Цветовая схема
+\definecolor{maincolor}{RGB}{102, 126, 234}
+\definecolor{accentcolor}{RGB}{255, 204, 0}
+
+% Настройка Beamer
+\usetheme{Madrid}
+\usecolortheme{whale}
+\setbeamercolor{structure}{fg=maincolor}
+\setbeamercolor{frametitle}{fg=white, bg=maincolor}
+\setbeamercolor{block title}{fg=white, bg=maincolor!80}
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{block title}{size=\footnotesize}
+\setbeamerfont{normal text}{size=\footnotesize}
+
+\title{Анализ и прогнозирование потребления алкоголя студентами}
+\author{Устинов Т.А.}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}{Цель и данные}
+\small
+\textbf{Цель:} Разработка ML-модели для прогнозирования высокого потребления алкоголя.
+
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{block}{Данные}
+\begin{itemize}\setlength\itemsep{2pt}
+\item 395 студентов, 22 признака
+\item Источник: HuggingFace Datasets
+\item Целевая: \texttt{high\_alcohol}
+\item Дисбаланс: 89\%/11\%
+\end{itemize}
+\end{block}
+\end{column}
+\begin{column}{0.45\textwidth}
+\centering
+\includegraphics[width=0.95\textwidth]{alcohol_distribution.png}
+\footnotesize Распределение целевой переменной
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Методы и модели}
+\small
+\begin{columns}[T]
+\begin{column}{0.5\textwidth}
+
+\begin{block}{Модели}
+\begin{itemize}\setlength\itemsep{2pt}
+\item Logistic Regression
+\item \textbf{Random Forest}
+\item Gradient Boosting
+\item SVM
+\item KNN
+\end{itemize}
+\end{block}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+
+\begin{block}{Метрики}
+Accuracy, Precision, Recall, F1, ROC-AUC
+\end{block}
+
+\begin{block}{Предобработка}
+\begin{itemize}\setlength\itemsep{2pt}
+\item Label Encoding
+\item StandardScaler
+\item Стратификация 80/20
+\end{itemize}
+\end{block}
+
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Результаты моделей}
+\small
+\textbf{Лучшая модель: Random Forest}
+
+\vspace{2mm}
+
+\begin{adjustbox}{max width=\textwidth, center}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Модель} & \textbf{Accuracy} & \textbf{F1-Score} & \textbf{ROC-AUC} \\
+\midrule
+Logistic Regression & 0.91 & 0.72 & 0.92 \\
+\rowcolor{accentcolor!20}
+\textbf{Random Forest} & \textbf{0.93} & \textbf{0.78} & \textbf{0.94} \\
+Gradient Boosting & 0.92 & 0.76 & 0.93 \\
+SVM & 0.90 & 0.70 & 0.91 \\
+KNN & 0.89 & 0.68 & 0.90 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+
+\end{frame}
+
+\begin{frame}{Важность признаков}
+\small
+\textbf{Топ-15 факторов влияния:}
+
+\centering
+\includegraphics[width=0.6\textwidth]{feature_importance_horizontal.png}
+
+\vspace{2mm}
+
+\alert{Вывод:} Социальная активность + академические проблемы = ключевые риски.
+\end{frame}
+
+\begin{frame}{Матрица ошибок и метрики}
+\small
+\begin{columns}[T]
+\begin{column}{0.5\textwidth}
+
+\begin{block}{Метрики на тесте}
+\begin{itemize}\setlength\itemsep{2pt}
+\item Accuracy: 93\%
+\item Precision: 93\%
+\item Recall: 67\%
+\item F1: 78\%
+\item ROC-AUC: 0.94
+\end{itemize}
+\end{block}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\centering
+\includegraphics[width=0.85\textwidth]{confusion_matrix.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Выводы и применение}
+\small
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{block}{Итоги}
+\begin{itemize}\setlength\itemsep{7pt}
+\item Модель готова к внедрению
+\item F1=0.78, AUC=0.94
+\item Основные факторы риска:
+\begin{enumerate}
+\scriptsize
+\item Социальная активность
+\item Возраст (16-18 лет)
+\item Академические проблемы
+\end{enumerate}
+\end{itemize}
+\end{block}
+
+\vspace{3mm}
+
+\begin{alertblock}{Ограничение}
+Низкий Recall (67\%) — может пропускать часть случаев
+\end{alertblock}
+\end{column}
+
+\begin{column}{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{precision_recall_curve.png}
+\vspace{3mm}
+
+\begin{exampleblock}{Применение}
+\scriptsize
+\begin{itemize}\setlength\itemsep{1pt}
+\item Скрининг групп риска
+\item Профилактические программы
+\item Фокус на студентов 16-18 лет
+\end{itemize}
+\end{exampleblock}
+\end{column}
+\end{columns}
+\end{frame}
+
+\end{document}
